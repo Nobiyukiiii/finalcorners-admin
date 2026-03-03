@@ -277,18 +277,24 @@ async function handleSubmit(e) {
       }
     }
 
-    const payload = {
-      title,
-      slug,
-      release_date: document.getElementById('song-release-date')?.value || null,
-      spotify_url: document.getElementById('song-spotify-url')?.value?.trim() || null,
-      youtube_url: document.getElementById('song-youtube-url')?.value?.trim() || null,
-      description: document.getElementById('song-description')?.value?.trim() || null,
-      isrc: isrcEl?.value?.trim() || null,
-      duration: durationEl?.value?.trim() || null,
-      coming_soon: document.getElementById('song-coming-soon')?.checked ?? false,
-    };
+const isComingSoon = document.getElementById('song-coming-soon')?.checked ?? false;
 
+const payload = {
+  title,
+  slug,
+  release_date: document.getElementById('song-release-date')?.value || null,
+  spotify_url: document.getElementById('song-spotify-url')?.value?.trim() || null,
+  youtube_url: document.getElementById('song-youtube-url')?.value?.trim() || null,
+  description: document.getElementById('song-description')?.value?.trim() || null,
+  isrc: isrcEl?.value?.trim() || null,
+  duration: durationEl?.value?.trim() || null,
+
+  // Sistem lama tetap jalan
+  coming_soon: isComingSoon,
+
+  // Sistem baru untuk website
+  status: isComingSoon ? 'upcoming' : 'released',
+};
     if (cover_url !== null) {
       payload.cover_url = cover_url;
       payload.cover_path = cover_path;
