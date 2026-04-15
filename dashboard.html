@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Final Corners — Admin</title>
+  <link rel="stylesheet" href="./styles.css">
+  <link href="https://cdn.jsdelivr.net/npm/quill@1.3.7/dist/quill.snow.css" rel="stylesheet">
+</head>
+<body>
+
+  <div class="layout">
+    <!-- Sidebar overlay for mobile (must be inside .layout) -->
+    <div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+    <!-- ─── Sidebar ─────────────────────────────────────────── -->
+    <aside class="sidebar" id="sidebar" role="navigation" aria-label="Main navigation">
+      <div class="sidebar__brand">
+        <div class="sidebar__logo">Final<span>Corners</span></div>
+        <div class="sidebar__subtitle">Admin Panel</div>
+      </div>
+
+      <nav class="sidebar__nav">
+        <div class="nav-section-label">Overview</div>
+        <div class="nav-item" data-section="dashboard" role="button" tabindex="0">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+          Dashboard
+        </div>
+
+        <div class="nav-section-label">Content</div>
+        <div class="nav-item" data-section="songs" role="button" tabindex="0">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+          Songs
+        </div>
+        <div class="nav-item" data-section="members" role="button" tabindex="0">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+          Members
+        </div>
+        <div class="nav-item" data-section="news" role="button" tabindex="0">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+          News
+        </div>
+        <div class="nav-item" data-section="gallery" role="button" tabindex="0">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          Gallery
+        </div>
+
+        <div class="nav-section-label">Inbox</div>
+        <div class="nav-item" data-section="messages" role="button" tabindex="0">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          Messages
+        </div>
+
+        <div class="nav-section-label">System</div>
+        <div class="nav-item" data-section="activity" role="button" tabindex="0">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+          Activity Log
+        </div>
+        <div class="nav-item" data-section="settings" role="button" tabindex="0">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93l-1.41 1.41M4.93 4.93l1.41 1.41M19.07 19.07l-1.41-1.41M4.93 19.07l1.41-1.41M21 12h-2M5 12H3M12 21v-2M12 5V3"/></svg>
+          Settings
+        </div>
+      </nav>
+
+      <div class="sidebar__footer">
+        <button class="btn btn--ghost" id="logout-btn" style="width: 100%; justify-content: center;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+          Sign Out
+        </button>
+      </div>
+    </aside>
+
+    <!-- ─── Main ──────────────────────────────────────────────── -->
+    <div class="main">
+
+      <!-- Header -->
+      <header class="header">
+        <div class="header__left">
+          <button id="sidebar-toggle" aria-label="Toggle sidebar">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+          </button>
+          <h1 class="header__title" id="page-title">Dashboard</h1>
+        </div>
+        <div class="header__right">
+          <div class="header__status">
+            <span class="header__status-dot"></span>
+            Live
+          </div>
+          <span style="font-family: var(--font-mono); font-size: 0.72rem; color: var(--text-muted); display: none;" id="header-user-email"></span>
+        </div>
+      </header>
+
+      <!-- Content -->
+      <div class="content">
+
+        <!-- ─── Dashboard ──────────────────────────────────── -->
+        <section class="section section--active" id="section-dashboard">
+          <div class="metrics-grid">
+            <div class="metric-card">
+              <div class="metric-card__label">Total Songs</div>
+              <div class="metric-card__value" id="metric-songs">—</div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-card__label">Released</div>
+              <div class="metric-card__value" id="metric-released">—</div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-card__label">Coming Soon</div>
+              <div class="metric-card__value" id="metric-coming-soon">—</div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-card__label">Members</div>
+              <div class="metric-card__value" id="metric-members">—</div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-card__label">News</div>
+              <div class="metric-card__value" id="metric-news">—</div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-card__label">Gallery</div>
+              <div class="metric-card__value" id="metric-gallery">—</div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-card__label">Messages</div>
+              <div class="metric-card__value" id="metric-messages">—</div>
+            </div>
+          </div>
+
+          <div class="dashboard-panels">
+            <div class="panel">
+              <div class="panel__header">Latest Messages</div>
+              <div class="panel__body" id="latest-messages">
+                <p class="loading-state">Loading…</p>
+              </div>
+            </div>
+
+            <div class="panel">
+              <div class="panel__header">Latest Songs</div>
+              <div class="panel__body" id="latest-songs">
+                <p class="loading-state">Loading…</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ─── Songs ─────────────────────────────────────────── -->
+        <section class="section" id="section-songs">
+          <div class="section-header">
+            <h2 class="section-title">Songs</h2>
+            <div class="section-controls">
+              <input type="search" class="search-input" id="songs-search" placeholder="Search title, slug, ISRC…">
+              <button class="btn btn--danger bulk-action-btn hidden" id="songs-bulk-delete-btn" disabled>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/></svg>
+                Delete Selected
+              </button>
+              <button class="btn btn--primary" id="songs-add-btn">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                Add Song
+              </button>
+            </div>
+          </div>
+
+          <!-- Type filter tabs -->
+          <div class="songs-type-filter" id="songs-type-filter">
+            <button class="type-filter-btn active" data-type="all">All</button>
+            <button class="type-filter-btn" data-type="single">
+              <span class="badge badge--type badge--type-single">Single</span>
+            </button>
+            <button class="type-filter-btn" data-type="ep">
+              <span class="badge badge--type badge--type-ep">EP</span>
+            </button>
+            <button class="type-filter-btn" data-type="album">
+              <span class="badge badge--type badge--type-album">Album</span>
+            </button>
+          </div>
+
+          <div class="table-wrap">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th style="width:40px;">
+                    <input type="checkbox" id="songs-select-all" class="table-checkbox" aria-label="Select all">
+                  </th>
+                  <th></th>
+                  <th>Title / Slug</th>
+                  <th>Type</th>
+                  <th>Release Date</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="songs-table-body">
+                <tr><td colspan="7" class="table-loading">Loading…</td></tr>
+              </tbody>
+            </table>
+            <div class="pagination">
+              <span class="pagination-info" id="songs-pagination-info"></span>
+              <button class="btn btn--ghost" id="songs-prev-btn" disabled>← Prev</button>
+              <button class="btn btn--ghost" id="songs-next-btn" disabled>Next →</button>
+            </div>
+          </div>
+        </section>
+
+        <!-- ─── Members ───────────────────────────────────────── -->
+        <section class="section" id="section-members">
+          <div class="section-header">
+            <h2 class="section-title">Members</h2>
+            <div class="section-controls">
+              <span style="font-size:0.78rem; color: var(--text-muted); font-family: var(--font-mono);">Drag to reorder</span>
+              <button class="btn btn--primary" id="members-add-btn">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                Add Member
+              </button>
+            </div>
+          </div>
+          <div class="members-grid" id="members-grid">
+            <p class="loading-state">Loading…</p>
+          </div>
+        </section>
+
+        <!-- ─── News ──────────────────────────────────────────── -->
+        <section class="section" id="section-news">
+          <div class="section-header">
+            <h2 class="section-title">News</h2>
+            <div class="section-controls">
+              <input type="search" class="search-input" id="news-search" placeholder="Search title or slug…">
+              <button class="btn btn--danger bulk-action-btn hidden" id="news-bulk-delete-btn" disabled>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/></svg>
+                Delete Selected
+              </button>
+              <button class="btn btn--primary" id="news-add-btn">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                Add Article
+              </button>
+            </div>
+          </div>
+
+          <div class="table-wrap">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th style="width:40px;">
+                    <input type="checkbox" id="news-select-all" class="table-checkbox" aria-label="Select all">
+                  </th>
+                  <th></th>
+                  <th>Title / Slug</th>
+                  <th>Published Date</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="news-table-body">
+                <tr><td colspan="6" class="table-loading">Loading…</td></tr>
+              </tbody>
+            </table>
+            <div class="pagination">
+              <span class="pagination-info" id="news-pagination-info"></span>
+              <button class="btn btn--ghost" id="news-prev-btn" disabled>← Prev</button>
+              <button class="btn btn--ghost" id="news-next-btn" disabled>Next →</button>
+            </div>
+          </div>
+        </section>
+
+        <!-- ─── Gallery ───────────────────────────────────────── -->
+        <section class="section" id="section-gallery">
+          <div class="section-header">
+            <h2 class="section-title">Gallery</h2>
+          </div>
+
+          <div class="gallery-toolbar">
+            <input type="text" class="form-input" id="gallery-upload-tag" placeholder="Tag (optional)" style="width: 180px;">
+            <button class="btn btn--primary" id="gallery-upload-btn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0018 9h-1.26A8 8 0 103 16.3"/></svg>
+              Upload Images
+            </button>
+            <input type="file" id="gallery-upload-input" accept="image/*" multiple class="hidden" aria-hidden="true">
+            <select class="form-select" id="gallery-tag-filter" style="width: 160px;">
+              <option value="">All Tags</option>
+            </select>
+            <button class="btn btn--ghost" id="gallery-select-all-btn">Select All</button>
+            <button class="btn btn--danger" id="gallery-bulk-delete-btn" disabled>Delete Selected</button>
+            <span class="gallery-upload-progress hidden" id="gallery-upload-progress"></span>
+          </div>
+
+          <div class="gallery-grid" id="gallery-grid">
+            <p class="loading-state">Loading…</p>
+          </div>
+        </section>
+
+        <!-- ─── Messages ──────────────────────────────────────── -->
+        <section class="section" id="section-messages">
+          <div class="section-header">
+            <h2 class="section-title">Messages</h2>
+            <div class="section-controls">
+              <input type="search" class="search-input" id="messages-search" placeholder="Search name or email…">
+            </div>
+          </div>
+
+          <div class="table-wrap">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Sender</th>
+                  <th>Subject</th>
+                  <th>Preview</th>
+                  <th>Received</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="messages-table-body">
+                <tr><td colspan="5" class="table-loading">Loading…</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- ─── Activity Log ───────────────────────────────────── -->
+        <section class="section" id="section-activity">
+          <div class="section-header">
+            <h2 class="section-title">Activity Log</h2>
+            <div class="section-controls">
+              <select class="form-select" id="activity-filter-entity" style="width:140px;">
+                <option value="">All Entities</option>
+                <option value="song">Songs</option>
+                <option value="member">Members</option>
+                <option value="news">News</option>
+                <option value="gallery">Gallery</option>
+                <option value="settings">Settings</option>
+              </select>
+              <select class="form-select" id="activity-filter-action" style="width:130px;">
+                <option value="">All Actions</option>
+                <option value="create">Created</option>
+                <option value="update">Updated</option>
+                <option value="delete">Deleted</option>
+              </select>
+              <button class="btn btn--ghost" id="activity-refresh-btn">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+                Refresh
+              </button>
+            </div>
+          </div>
+
+          <div class="activity-log-wrap">
+            <div id="activity-log-list">
+              <p class="loading-state">Loading activity…</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- ─── Settings ──────────────────────────────────────── -->
+        <section class="section" id="section-settings">
+          <div class="section-header">
+            <h2 class="section-title">Settings</h2>
+          </div>
+
+          <div class="settings-panel">
+            <span class="hidden" id="settings-loading">Loading…</span>
+            <form id="settings-form" novalidate>
+              <div class="form-group">
+                <label class="form-label" for="settings-band-bio">Band Bio</label>
+                <textarea class="form-textarea" id="settings-band-bio" rows="5" placeholder="Write about the band…"></textarea>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="settings-location">Location</label>
+                <input class="form-input" type="text" id="settings-location" placeholder="e.g. Los Angeles, CA">
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="settings-formed-year">Formed Year</label>
+                <input class="form-input" type="text" id="settings-formed-year" placeholder="e.g. 2018">
+              </div>
+
+              <div class="form-group" style="margin-top: 24px; display: flex; gap: 12px; align-items: center;">
+                <button class="btn btn--primary" type="submit">Save Settings</button>
+                <span class="settings-updated" id="settings-updated-at"></span>
+              </div>
+            </form>
+          </div>
+        </section>
+
+      </div><!-- /content -->
+    </div><!-- /main -->
+  </div><!-- /layout -->
+
+
+  <!-- ══════════════════════════════════════════════════════
+       MODALS
+  ══════════════════════════════════════════════════════ -->
+
+  <!-- ─── Song Modal ───────────────────────────────────────── -->
+  <div class="modal" id="song-modal" role="dialog" aria-modal="true" aria-labelledby="song-modal-title">
+    <div class="modal__panel modal__panel--lg">
+      <div class="modal__header">
+        <h2 class="modal__title" id="song-modal-title">Add Song</h2>
+        <button class="modal__close" data-modal-close="song-modal" aria-label="Close">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+
+      <div class="modal__body">
+        <form id="song-form" novalidate>
+
+          <!-- Row 1: Title + Slug -->
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="song-title">Title <span style="color:var(--danger)">*</span></label>
+              <input class="form-input" type="text" id="song-title" placeholder="Song title" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="song-slug">Slug <span style="color:var(--danger)">*</span></label>
+              <input class="form-input" type="text" id="song-slug" placeholder="auto-generated" required>
+            </div>
+          </div>
+
+          <!-- Row 2: Type + Status -->
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="song-type">Release Type <span style="color:var(--danger)">*</span></label>
+              <select class="form-select" id="song-type">
+                <option value="single">Single</option>
+                <option value="ep">EP</option>
+                <option value="album">Album</option>
+              </select>
+              <span class="form-hint">Menentukan tampilan badge di website</span>
+            </div>
+            <div class="form-group" id="track-count-group">
+              <label class="form-label" for="song-track-count">Jumlah Lagu</label>
+              <input class="form-input" type="number" id="song-track-count" placeholder="cth: 6" min="1" max="99">
+              <span class="form-hint">Tampil sebagai sub-label badge EP/Album</span>
+            </div>
+          </div>
+
+          <!-- Row 3: Release Date + Duration -->
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="song-release-date">Release Date</label>
+              <input class="form-input" type="date" id="song-release-date">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="song-duration">Duration (mm:ss)</label>
+              <input class="form-input" type="text" id="song-duration" placeholder="3:45">
+            </div>
+          </div>
+
+          <!-- Row 4: Spotify + YouTube -->
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="song-spotify-url">Spotify URL</label>
+              <input class="form-input" type="url" id="song-spotify-url" placeholder="https://open.spotify.com/…">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="song-youtube-url">YouTube URL</label>
+              <input class="form-input" type="url" id="song-youtube-url" placeholder="https://youtube.com/watch?v=…">
+            </div>
+          </div>
+
+          <!-- Row 5: Apple Music + Presave -->
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="song-apple-music-url">Apple Music URL</label>
+              <input class="form-input" type="url" id="song-apple-music-url" placeholder="https://music.apple.com/…">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="song-presave-url">Pre-Save URL</label>
+              <input class="form-input" type="url" id="song-presave-url" placeholder="https://distrokid.com/hyperfollow/…">
+              <span class="form-hint">Tampil saat status Coming Soon</span>
+            </div>
+          </div>
+
+          <!-- Row 6: ISRC + Genre Tags -->
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="song-isrc">ISRC</label>
+              <input class="form-input" type="text" id="song-isrc" placeholder="US-ABC-23-00001">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="song-genre-tags">Genre Tags</label>
+              <input class="form-input" type="text" id="song-genre-tags" placeholder="Indie Rock, Garage Pop">
+              <span class="form-hint">Pisahkan dengan koma. Tampil sebagai pill di website.</span>
+            </div>
+          </div>
+
+          <!-- Description -->
+          <div class="form-group">
+            <label class="form-label" for="song-description">Description</label>
+            <textarea class="form-textarea" id="song-description" rows="3" placeholder="Deskripsi singkat lagu/EP/album…"></textarea>
+          </div>
+
+          <!-- Cover Image -->
+          <div class="form-group">
+            <label class="form-label" for="song-cover-input">Cover Image</label>
+            <input type="file" class="form-input" id="song-cover-input" accept="image/*">
+            <div class="image-preview-wrap">
+              <img class="image-preview hidden" id="song-cover-preview" alt="Cover preview">
+            </div>
+          </div>
+
+          <!-- Flags -->
+          <div class="form-flags-row">
+            <div class="form-checkbox-group">
+              <input class="form-checkbox" type="checkbox" id="song-coming-soon">
+              <label class="form-checkbox-label" for="song-coming-soon">Mark as Coming Soon</label>
+            </div>
+            <div class="form-checkbox-group">
+              <input class="form-checkbox" type="checkbox" id="song-featured">
+              <label class="form-checkbox-label" for="song-featured">Featured / Latest Release</label>
+            </div>
+          </div>
+
+        </form>
+      </div>
+
+      <div class="modal__footer">
+        <button class="btn btn--ghost" data-modal-close="song-modal">Cancel</button>
+        <button class="btn btn--primary" type="submit" form="song-form">Save Song</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── Member Modal ─────────────────────────────────────── -->
+  <div class="modal" id="member-modal" role="dialog" aria-modal="true" aria-labelledby="member-modal-title">
+    <div class="modal__panel">
+      <div class="modal__header">
+        <h2 class="modal__title" id="member-modal-title">Add Member</h2>
+        <button class="modal__close" data-modal-close="member-modal" aria-label="Close">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+
+      <div class="modal__body">
+        <form id="member-form" novalidate>
+          <div class="form-group">
+            <label class="form-label" for="member-name">Name <span style="color:var(--danger)">*</span></label>
+            <input class="form-input" type="text" id="member-name" placeholder="Member name" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="member-role">Role <span style="color:var(--danger)">*</span></label>
+            <input class="form-input" type="text" id="member-role" placeholder="e.g. Lead Guitarist" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="member-bio">Bio</label>
+            <textarea class="form-textarea" id="member-bio" rows="3" placeholder="Short bio…"></textarea>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="member-photo-input">Photo</label>
+            <input type="file" class="form-input" id="member-photo-input" accept="image/*">
+            <div class="image-preview-wrap">
+              <img class="image-preview hidden" id="member-photo-preview" alt="Photo preview">
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <div class="modal__footer">
+        <button class="btn btn--ghost" data-modal-close="member-modal">Cancel</button>
+        <button class="btn btn--primary" type="submit" form="member-form">Save Member</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── News Modal ───────────────────────────────────────── -->
+  <div class="modal" id="news-modal" role="dialog" aria-modal="true" aria-labelledby="news-modal-title">
+    <div class="modal__panel modal__panel--lg">
+      <div class="modal__header">
+        <h2 class="modal__title" id="news-modal-title">Add Article</h2>
+        <button class="modal__close" data-modal-close="news-modal" aria-label="Close">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+
+      <div class="modal__body">
+        <form id="news-form" novalidate>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="news-title">Title <span style="color:var(--danger)">*</span></label>
+              <input class="form-input" type="text" id="news-title" placeholder="Article title" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="news-slug">Slug <span style="color:var(--danger)">*</span></label>
+              <input class="form-input" type="text" id="news-slug" placeholder="auto-generated" required>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="news-published-at">Publish Date <span style="color:var(--text-muted); font-weight:400">(leave blank for draft)</span></label>
+            <input class="form-input" type="datetime-local" id="news-published-at">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Content</label>
+            <div id="news-editor" style="height:300px;background:#fff;border-radius:6px;"></div>
+            <input type="hidden" id="news-content">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="news-meta-description">Meta Description</label>
+            <textarea class="form-textarea" id="news-meta-description" rows="2" placeholder="SEO description…"></textarea>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="news-image-input">Featured Image</label>
+            <input type="file" class="form-input" id="news-image-input" accept="image/*">
+            <div class="image-preview-wrap">
+              <img class="image-preview hidden" id="news-image-preview" alt="Featured image preview">
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <div class="modal__footer">
+        <button class="btn btn--ghost" data-modal-close="news-modal">Cancel</button>
+        <button class="btn btn--primary" type="submit" form="news-form">Save Article</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── Message View Modal ───────────────────────────────── -->
+  <div class="modal" id="message-view-modal" role="dialog" aria-modal="true" aria-labelledby="message-view-title">
+    <div class="modal__panel">
+      <div class="modal__header">
+        <h2 class="modal__title" id="message-view-title">View Message</h2>
+        <button class="modal__close" data-modal-close="message-view-modal" aria-label="Close">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+
+      <div class="modal__body">
+        <div class="message-view">
+          <div class="message-view__meta">
+            <div class="message-view__meta-row">
+              <span class="message-view__meta-label">From</span>
+              <span class="message-view__meta-value" id="msg-view-name"></span>
+            </div>
+            <div class="message-view__meta-row">
+              <span class="message-view__meta-label">Email</span>
+              <span class="message-view__meta-value" id="msg-view-email"></span>
+            </div>
+            <div class="message-view__meta-row">
+              <span class="message-view__meta-label">Subject</span>
+              <span class="message-view__meta-value" id="msg-view-subject"></span>
+            </div>
+            <div class="message-view__meta-row">
+              <span class="message-view__meta-label">Date</span>
+              <span class="message-view__meta-value" id="msg-view-date"></span>
+            </div>
+          </div>
+          <div class="message-view__body" id="msg-view-body"></div>
+        </div>
+      </div>
+
+      <div class="modal__footer">
+        <button class="btn btn--ghost" data-modal-close="message-view-modal">Close</button>
+        <button class="btn btn--danger" id="msg-view-delete-btn">Delete Message</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/quill@1.3.7/dist/quill.min.js"></script>
+  <script type="module" src="./js/main.js"></script>
+
+  <script type="module">
+    // Bind all static modal close buttons on load
+    import { bindModalCloseButtons } from './js/modal.js';
+    bindModalCloseButtons(document.body);
+  </script>
+  
+</body>
+</html>
